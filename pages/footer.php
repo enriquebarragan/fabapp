@@ -43,6 +43,6 @@
     <script src="/vendor/morrisjs/morris.min.js"></script>
     <script src="/vendor/raphael/raphael.min.js"></script>
     <script src="/admin/reports/test.js"></script>
-    <script src="/admin/reports/transactions.js"></script>
+    <script src="/admin/reports/interactions.js"></script>
 </body>
 </html>

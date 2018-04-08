@@ -29,7 +29,7 @@ if (!$staff || $staff->getRoleID() < 7){
                                 <li><a>Today</a></li>
                                 <li><a>This Week</a></li>
                                 <li><a>This Month</a></li>
-                                <li><a>This Semester</a></li>
+                                <li><a>This Quarter</a></li>
                                 <li><a>This Year</a></li>
                                 <li><a>All Time</a></li>
                             </ul>
@@ -45,7 +45,7 @@ if (!$staff || $staff->getRoleID() < 7){
             <!-- /.panel -->
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class='far fa-chart-bar fa-fw'></i> Transactions By Device
+                    <i class='far fa-chart-bar fa-fw'></i> Transactions By Devices
                     <div class="pull-right">
                         <div class="btn-group">
                             <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
@@ -55,7 +55,7 @@ if (!$staff || $staff->getRoleID() < 7){
                                 <li><a>Today</a></li>
                                 <li><a>This Week</a></li>
                                 <li><a>This Month</a></li>
-                                <li><a>This Semester</a></li>
+                                <li><a>This Quarter</a></li>
                                 <li><a>This Year</a></li>
                                 <li><a>All Time</a></li>
                             </ul>
@@ -64,8 +64,9 @@ if (!$staff || $staff->getRoleID() < 7){
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <div class="table-responsive" id="trans_table">
-                    </div>
+                    <div id="trans_by_devices_table_title"> </div>
+                    <div class="table-responsive" id="trans_by_devices_table"></div>
+                    <div id="trans_by_devices_barchart"></div>
                 </div>
                 <!-- /.panel-body -->
             </div>
@@ -153,7 +154,6 @@ if (!$staff || $staff->getRoleID() < 7){
     <!-- /.row -->
 </div>
 <!-- /#page-wrapper -->
-
 <?php
 //Standard call for dependencies
 include ($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');
