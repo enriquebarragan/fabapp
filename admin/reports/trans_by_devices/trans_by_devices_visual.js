@@ -29,8 +29,8 @@ trans_by_devices_visual.prototype.table_get_response = function() {
   }
 };
 
-// visual method for barchart
-trans_by_devices_visual.prototype.barchart_get_response = function() {
+// visual method for donut
+trans_by_devices_visual.prototype.donut_get_response = function() {
   div_id = this.div_id;
   if (this.option == "") {
       document.getElementById(div_id).innerHTML = "";
@@ -45,18 +45,11 @@ trans_by_devices_visual.prototype.barchart_get_response = function() {
       }
       xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-          var bar_data = this.responseText;
-          var bar_data_obj = eval(bar_data);
-          alert("test 4")
-          alert(typeof bar_data_obj);
-          alert(bar_data_obj);
-          new Morris.Bar({
-            element: 'trans_by_devices_barchart',
-            data: bar_data_obj,
-            xkey: 'y',
-            ykeys: ['a'],
-            labels: ['Transactions'],
-            xLabelMargin: 8
+          var donut_data = this.responseText;
+          var donut_data_obj = eval(donut_data);
+          new Morris.Donut({
+            element: 'trans_by_devices_donut',
+            data: donut_data_obj
           });
         }
       };

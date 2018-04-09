@@ -44,5 +44,6 @@
     <script src="/vendor/raphael/raphael.min.js"></script>
     <script src="/admin/reports/test.js"></script>
     <script src="/admin/reports/interactions.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </body>
 </html>

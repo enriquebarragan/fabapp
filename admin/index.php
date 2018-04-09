@@ -6,6 +6,7 @@ if (!$staff || $staff->getRoleID() < 7){
 	exit();
 }
 ?>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <title><?php echo $sv['site_name'];?> Admin</title>
 <div id="page-wrapper">
     <div class="row">
@@ -19,11 +20,11 @@ if (!$staff || $staff->getRoleID() < 7){
         <div class="col-lg-8">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class="far fa-chart-bar"></i> Area Chart
+                    <i class="fas fa-hourglass-half"></i> Transactions by Hour
                     <div class="pull-right">
                         <div class="btn-group">
                             <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                Actions <span class="caret"></span>
+                                Date Range <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu pull-right" id="trans_area_date" role="menu">
                                 <li><a>Today</a></li>
@@ -38,7 +39,7 @@ if (!$staff || $staff->getRoleID() < 7){
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <div id="morris-area-chart"></div>
+                    <div id="weekly_trans_by_hour_chart"></div>
                 </div>
                 <!-- /.panel-body -->
             </div>
@@ -66,7 +67,7 @@ if (!$staff || $staff->getRoleID() < 7){
                 <div class="panel-body">
                     <div id="trans_by_devices_table_title"> </div>
                     <div class="table-responsive" id="trans_by_devices_table"></div>
-                    <div id="trans_by_devices_barchart"></div>
+                    <div id="trans_by_devices_donut"></div>
                 </div>
                 <!-- /.panel-body -->
             </div>
@@ -76,61 +77,86 @@ if (!$staff || $staff->getRoleID() < 7){
         </div>
         <!-- /.col-lg-8 -->
         <div class="col-lg-4">
+          <div class="panel panel-default">
+              <div class="panel-heading">
+                  <i class='fas fa-table fa-lg'></i> Training Certifications - Total Stats
+              </div>
+              <!-- /.panel-heading -->
+              <div class="panel-body">
+                <table class="table table-condensed">
+                      <tbody>
+                          <?php if($result = $mysqli->query("
+                              SELECT count(*) as count
+                              FROM `trainingmodule`
+                      ")){
+                          $row = $result->fetch_assoc()?>
+                          <tr>
+                              <td><i class="far fa-file fa-lg"></i> Training Modules</td>
+                              <td><?php echo $row['count'];?></td>
+                          </tr>
+                      <?php } else { ?>
+                          <tr>
+                              <td>Training Modules</td><td>-</td>
+                          </tr>
+                      <?php } ?>
+                      <?php if($result = $mysqli->query("
+                          SELECT count(*) as count
+                          FROM `tm_enroll`
+                          WHERE `current` = 'Y'
+                      ")){
+                          $row = $result->fetch_assoc()?>
+                          <tr>
+                              <td><i class="far fa-check-circle fa-lg"></i> Certificates Issued</td>
+                              <td><?php echo $row['count'];?></td>
+                          </tr>
+                      <?php } else { ?>
+                          <tr>
+                              <td>Training Enrollments</td><td>-</td>
+                          </tr>
+                      <?php } ?>
+                      </tbody>
+                    </table>
+              </div>
+              <!-- /.panel-body -->
+          </div>
+
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class="fas fa-bell fa-fw"></i> Notifications Panel
+                    <i class="fas fa-check-square"></i> Complete/Failed Jobs
+                    <div class="pull-right">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                Device Group <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right" id="device_group" role="menu">
+                              <?php
+                              if($result = $mysqli->query("SELECT dg_desc FROM device_group")) {
+                                while($row = $result->fetch_assoc()) {?>
+                                  <li><a><?php echo $row['dg_desc'];?></a></li>
+                              <?php }
+                              } ?>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="pull-right">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                Date Range <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right" id="trans_date" role="menu">
+                                <li><a>Today</a></li>
+                                <li><a>This Week</a></li>
+                                <li><a>This Month</a></li>
+                                <li><a>This Quarter</a></li>
+                                <li><a>This Year</a></li>
+                                <li><a>All Time</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <div class="list-group">
-                        <a href="#" class="list-group-item">
-                            <i class="fas fa-comment fa-fw"></i> New Comment
-                            <span class="pull-right text-muted small"><em>4 minutes ago</em>
-                            </span>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <i class="fab fa-twitter"></i> 3 New Followers
-                            <span class="pull-right text-muted small"><em>12 minutes ago</em>
-                            </span>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <i class="fas fa-envelope"></i> Message Sent
-                            <span class="pull-right text-muted small"><em>27 minutes ago</em>
-                            </span>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <i class="fas fa-tasks"></i> New Task
-                            <span class="pull-right text-muted small"><em>43 minutes ago</em>
-                            </span>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <i class="fas fa-upload"></i> Server Rebooted
-                            <span class="pull-right text-muted small"><em>11:32 AM</em>
-                            </span>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <i class="fas fa-bolt"></i> Server Crashed!
-                            <span class="pull-right text-muted small"><em>11:13 AM</em>
-                            </span>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <i class="fas fa-exclamation-triangle"></i> Server Not Responding
-                            <span class="pull-right text-muted small"><em>10:57 AM</em>
-                            </span>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <i class="fas fa-shopping-cart"></i> New Order Placed
-                            <span class="pull-right text-muted small"><em>9:49 AM</em>
-                            </span>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <i class="fas fa-money-bill-alt"></i> Payment Received
-                            <span class="pull-right text-muted small"><em>Yesterday</em>
-                            </span>
-                        </a>
-                    </div>
-                    <!-- /.list-group -->
-                    <a href="#" class="btn btn-default btn-block">View All Alerts</a>
+                  <div id="failed_pie_chart_pie"></div>
                 </div>
                 <!-- /.panel-body -->
             </div>
@@ -154,6 +180,7 @@ if (!$staff || $staff->getRoleID() < 7){
     <!-- /.row -->
 </div>
 <!-- /#page-wrapper -->
+
 <?php
 //Standard call for dependencies
 include ($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');
