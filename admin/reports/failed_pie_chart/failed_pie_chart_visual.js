@@ -1,7 +1,9 @@
 // Visual Object
-function failed_pie_chart_visual(div_id, option) {
+function failed_pie_chart_visual(div_id, option, start, end) {
   this.div_id = div_id;
-  this.option = option
+  this.option = option;
+  this.start = start;
+  this.end = end;
 }
 
 // visual method for pie chart
@@ -30,19 +32,19 @@ failed_pie_chart_visual.prototype.pie_get_response = function() {
             var data = google.visualization.arrayToDataTable(pie_data_obj);
             // Optional; add a title and set the width and height of the chart
             var options = {is3D: true,
-              'width':375, 'height':250,
+              'width':340, 'height':250,
               slices: {
                 0: { color: '#4C944C'},
                 1: { color: '#9E0D0D'}
               }
             };
-            // Display the chart inside the <div> element with id="piechart"
+            document.getElementById(div_id).innerHTML = ""
             var chart = new google.visualization.PieChart(document.getElementById(div_id));
             chart.draw(data, options);
           }
         }
       };
-      xmlhttp.open("GET","../admin/reports/failed_pie_chart/"+div_id+".php?q="+this.option,true);
+      xmlhttp.open("GET","../admin/reports/failed_pie_chart/"+div_id+".php?q="+this.option+"&s="+this.start+"&e="+this.end,true);
       xmlhttp.send();
   }
 };

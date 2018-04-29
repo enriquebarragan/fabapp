@@ -8,7 +8,7 @@ function get_week_start_end($week, $year) {
 
   // returning as string to be put directly into sql statement
   $ret['week_start'] = date_to_sqldate($dto);
-  $dto->modify('+6 days');
+  $dto->modify('+7 days');
   $ret['week_end'] = date_to_sqldate($dto);
   return $ret;
 }

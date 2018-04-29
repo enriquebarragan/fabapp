@@ -1,40 +1,76 @@
 <?php
 include_once ($_SERVER['DOCUMENT_ROOT'].'/connections/db_connect8.php');
-include_once ($_SERVER['DOCUMENT_ROOT'].'/admin/reports/trans_by_devices/trans_by_devices_sql.php');
+//include_once ($_SERVER['DOCUMENT_ROOT'].'/admin/reports/trans_by_devices/trans_by_devices_sql.php');
 
-// This file contains all SQL statements and how they're handled
-
-// variables
 global $mysqli;
-$q = $_GET['q']; // string value passed from transaction.js
 
-$sql_query = "";
-switch ($q) {
-  case 'Today':
-    $sql_query = $sql_query_today;
-    break;
-  case 'This Week':
-    $sql_query = $sql_query_this_week;
-    break;
-  case 'This Month':
-    $sql_query = $sql_query_this_month;
-    break;
-  case 'This Quarter':
-    $sql_query = $sql_query_this_quarter;
-    break;
-  case 'This Year':
-    $sql_query = $sql_query_this_year;
-    break;
-  case 'All Time':
-    $sql_query = $sql_query_all_time;
-    break;
-  default:
-    $sql_query = $sql_query_today;
-    break;
-}
+//string value passed from interactions.js
+$start_date = $_GET['s'];
+$end_date = $_GET['e'];
 
-// prints out option
-//echo $q;
+$sql_query = "
+SELECT
+	SUM((SELECT COUNT(trans_id)
+         FROM transactions
+         WHERE devices.device_id = transactions.d_id
+         AND cast(transactions.t_start as date) BETWEEN
+         '" . $start_date . "' AND '" . $end_date . "')) as '# of Tickets',
+    SUM((SELECT COUNT(trans_id)
+         FROM transactions
+         WHERE devices.device_id = transactions.d_id
+         AND cast(transactions.t_start as date) BETWEEN
+         '" . $start_date . "' AND '" . $end_date . "'
+         AND device_desc LIKE 'Polyprinter%')) as '3D Prints',
+    SUM((SELECT COUNT(trans_id)
+         FROM transactions
+         WHERE devices.device_id = transactions.d_id
+         AND cast(transactions.t_start as date) BETWEEN
+         '" . $start_date . "' AND '" . $end_date . "'
+         AND device_desc LIKE '%Laser')) as 'Laser',
+    SUM((SELECT COUNT(trans_id)
+         FROM transactions
+         WHERE devices.device_id = transactions.d_id
+         AND cast(transactions.t_start as date) BETWEEN
+         '" . $start_date . "' AND '" . $end_date . "'
+         AND device_desc LIKE '%Vinyl%')) as 'Vinyl',
+    SUM((SELECT COUNT(trans_id)
+         FROM transactions
+         WHERE devices.device_id = transactions.d_id
+         AND cast(transactions.t_start as date) BETWEEN
+         '" . $start_date . "' AND '" . $end_date . "'
+         AND device_desc LIKE 'Elec%')) as 'Elec Station',
+    SUM((SELECT COUNT(trans_id)
+         FROM transactions
+         WHERE devices.device_id = transactions.d_id
+         AND cast(transactions.t_start as date) BETWEEN
+         '" . $start_date . "' AND '" . $end_date . "'
+         AND device_desc LIKE '%Mill')) as 'Mill',
+    SUM((SELECT COUNT(trans_id)
+         FROM transactions
+         WHERE devices.device_id = transactions.d_id
+         AND cast(transactions.t_start as date) BETWEEN
+         '" . $start_date . "' AND '" . $end_date . "'
+         AND device_desc LIKE '%Rift')) as 'VR',
+    SUM((SELECT COUNT(trans_id)
+         FROM transactions
+         WHERE devices.device_id = transactions.d_id
+         AND cast(transactions.t_start as date) BETWEEN
+         '" . $start_date . "' AND '" . $end_date . "'
+         AND device_desc LIKE '%Sewing%')) as 'Sew',
+    SUM((SELECT COUNT(trans_id)
+         FROM transactions
+         WHERE devices.device_id = transactions.d_id
+         AND cast(transactions.t_start as date) BETWEEN
+         '" . $start_date . "' AND '" . $end_date . "'
+         AND device_desc LIKE '%Scanner%')) as 'Scan',
+    SUM((SELECT COUNT(trans_id)
+         FROM transactions
+         WHERE devices.device_id = transactions.d_id
+         AND cast(transactions.t_start as date) BETWEEN
+         '" . $start_date . "' AND '" . $end_date . "'
+         AND device_desc LIKE '%Screen%')) as 'Screen Press'
+FROM devices;
+";
 
 echo "<table class='table table-bordered table-hover table-striped'>
 <thead>

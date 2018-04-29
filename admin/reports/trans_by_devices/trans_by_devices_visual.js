@@ -1,14 +1,14 @@
 // Visual Object
-function trans_by_devices_visual(type, div_id, option) {
-  this.type = type;
+function trans_by_devices_visual(div_id, start, end) {
   this.div_id = div_id;
-  this.option = option;
+  this.start = start;
+  this.end = end;
 }
 
 // visual method for table
 trans_by_devices_visual.prototype.table_get_response = function() {
   div_id = this.div_id;
-  if (this.option == "") {
+  if (this.start == "") {
       document.getElementById(div_id).innerHTML = "";
       return;
   } else {
@@ -24,7 +24,7 @@ trans_by_devices_visual.prototype.table_get_response = function() {
           document.getElementById(div_id).innerHTML = this.responseText;
         }
       };
-      xmlhttp.open("GET","../admin/reports/trans_by_devices/"+div_id+".php?q="+this.option,true);
+      xmlhttp.open("GET","../admin/reports/trans_by_devices/"+div_id+".php?s="+this.start+"&e="+this.end,true);
       xmlhttp.send();
   }
 };
@@ -32,7 +32,7 @@ trans_by_devices_visual.prototype.table_get_response = function() {
 // visual method for donut
 trans_by_devices_visual.prototype.donut_get_response = function() {
   div_id = this.div_id;
-  if (this.option == "") {
+  if (this.start == "") {
       document.getElementById(div_id).innerHTML = "";
       return;
   } else {
@@ -53,7 +53,7 @@ trans_by_devices_visual.prototype.donut_get_response = function() {
           });
         }
       };
-      xmlhttp.open("GET","../admin/reports/trans_by_devices/"+div_id+".php?q="+this.option,true);
+      xmlhttp.open("GET","../admin/reports/trans_by_devices/"+div_id+".php?s="+this.start+"&e="+this.end,true);
       xmlhttp.send();
   }
 };

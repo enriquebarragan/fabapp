@@ -1,47 +1,34 @@
 <?php
 include_once ($_SERVER['DOCUMENT_ROOT'].'/connections/db_connect8.php');
-include_once ($_SERVER['DOCUMENT_ROOT'].'/admin/reports/weekly_trans_by_hour/weekly_trans_by_hour_sql.php');
+//include_once ($_SERVER['DOCUMENT_ROOT'].'/admin/reports/weekly_trans_by_hour/weekly_trans_by_hour_sql.php');
+include_once ($_SERVER['DOCUMENT_ROOT'].'/admin/reports/functions.php');
 
 global $mysqli;
 $q = $_GET['q'];
 
-/*
-$sql_query = "";
-switch ($q) {
-  case 'Today':
-    $sql_query = $sql_query_today;
-    break;
-  case 'This Week':
-    $sql_query = $sql_query_this_week;
-    break;
-  case 'This Month':
-    $sql_query = $sql_query_this_month;
-    break;
-  case 'This Quarter':
-    $sql_query = $sql_query_this_quarter;
-    break;
-  case 'This Year':
-    $sql_query = $sql_query_this_year;
-    break;
-  case 'All Time':
-    $sql_query = $sql_query_all_time;
-    break;
-  default:
-    $sql_query = $sql_query_today;
-    break;
-}
-*/
+$todays_date = new DateTime($q); // test date value (delete this in prod)
+$current_date_details = get_year_month_week($todays_date->format('Y-m-d'));
+$week_array = get_week_start_end($current_date_details['week'], $current_date_details['year']);
 
-$sql_query = $test;
+$sql_query = '
+SELECT
+DAYOFWEEK(t_start) AS Day,
+HOUR( t_start ) AS HOUR,
+COUNT( HOUR( t_start ) ) AS  "# Tickets"
+FROM transactions
+WHERE  t_start BETWEEN ' . $week_array['week_start'] . ' AND ' . $week_array['week_end'] . '
+AND HOUR( t_start ) > 7
+GROUP BY DAY, HOUR
+ORDER BY HOUR( t_start ), DAYOFWEEK(t_start)
+';
+
 $day_counter = 1;
 echo "[['Hour', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']";
-
 if($result = $mysqli->query($sql_query)) {
   while($row = $result->fetch_assoc()) {
     if($day_counter == 1) {
       echo ", ['" . $row['HOUR'] . "'";
     }
-
       while($day_counter != $row['Day']) {
         echo ", 0";
         $day_counter = $day_counter + 1;
@@ -50,7 +37,6 @@ if($result = $mysqli->query($sql_query)) {
           $day_counter = 1;
         }
       }
-
       echo ", " . $row['# Tickets'];
       $day_counter = $day_counter + 1;
       if($day_counter > 7) {
@@ -68,7 +54,5 @@ if($result = $mysqli->query($sql_query)) {
 } else {
     echo mysqli_error($mysqli);
 }
-
 echo "]]";
-
 ?>

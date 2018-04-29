@@ -42,6 +42,7 @@ weekly_trans_by_hour_visual.prototype.chart_get_response = function() {
                 viewWindow: { min: 0 }
               }
             };
+            document.getElementById(div_id).innerHTML = "";
             var chart = new google.visualization.LineChart(document.getElementById(div_id));
             chart.draw(data, options);
           }

@@ -14,29 +14,6 @@ $dates_as_strings['today'] = date_to_sqldate($todays_date);
 
 // queries
 
-/*
-$test = '
-SELECT
-(CASE
-	WHEN DAYOFWEEK(t_start) = 1 THEN "Sunday"
- 	WHEN DAYOFWEEK(t_start) = 2 THEN "Monday"
- 	WHEN DAYOFWEEK(t_start) = 3 THEN "Tuesday"
- 	WHEN DAYOFWEEK(t_start) = 4 THEN "Wednesday"
- 	WHEN DAYOFWEEK(t_start) = 5 THEN "Thursday"
- 	WHEN DAYOFWEEK(t_start) = 6 THEN "Friday"
- 	WHEN DAYOFWEEK(t_start) = 7 THEN "Saturday"
-    ELSE "NULL"
-END) AS Day,
-HOUR( t_start ) AS HOUR,
-COUNT( HOUR( t_start ) ) AS  "# Tickets"
-FROM transactions
-WHERE  t_start BETWEEN  "2017-12-01 00:00:00" AND "2018-12-08 23:59:59"
-AND HOUR( t_start ) > 7
-GROUP BY DAY, HOUR
-ORDER BY HOUR( t_start ), DAYOFWEEK(t_start)
-'
-*/
-
 $test = '
 SELECT
 DAYOFWEEK(t_start) AS Day,

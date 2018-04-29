@@ -6,7 +6,6 @@ if (!$staff || $staff->getRoleID() < 7){
 	exit();
 }
 ?>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <title><?php echo $sv['site_name'];?> Admin</title>
 <div id="page-wrapper">
     <div class="row">
@@ -22,19 +21,7 @@ if (!$staff || $staff->getRoleID() < 7){
                 <div class="panel-heading">
                     <i class="fas fa-hourglass-half"></i> Transactions by Hour
                     <div class="pull-right">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                Date Range <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu pull-right" id="trans_area_date" role="menu">
-                                <li><a>Today</a></li>
-                                <li><a>This Week</a></li>
-                                <li><a>This Month</a></li>
-                                <li><a>This Quarter</a></li>
-                                <li><a>This Year</a></li>
-                                <li><a>All Time</a></li>
-                            </ul>
-                        </div>
+                      <p>Week of: <input type="text" id="weekly_trans_by_hour_datepicker"></p>
                     </div>
                 </div>
                 <!-- /.panel-heading -->
@@ -48,19 +35,16 @@ if (!$staff || $staff->getRoleID() < 7){
                 <div class="panel-heading">
                     <i class='far fa-chart-bar fa-fw'></i> Transactions By Devices
                     <div class="pull-right">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                Date Range <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu pull-right" id="trans_date" role="menu">
-                                <li><a>Today</a></li>
-                                <li><a>This Week</a></li>
-                                <li><a>This Month</a></li>
-                                <li><a>This Quarter</a></li>
-                                <li><a>This Year</a></li>
-                                <li><a>All Time</a></li>
-                            </ul>
-                        </div>
+                      &nbsp;&nbsp;
+                      <div class="btn-group btn-group-xs">
+                        <button class="btn btn-default" type="button" id="trans_by_devices_button">Run</button>
+                      </div>
+                    </div>
+                    <div class="pull-right">
+                      <p>&nbsp;&nbsp;&nbsp;&nbsp;End: <input type="text" id="trans_by_devices_datepicker_end"></p>
+                    </div>
+                    <div class="pull-right">
+                      <p>Start: <input type="text" id="trans_by_devices_datepicker_start"></p>
                     </div>
                 </div>
                 <!-- /.panel-heading -->
@@ -128,7 +112,8 @@ if (!$staff || $staff->getRoleID() < 7){
                             <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                 Device Group <span class="caret"></span>
                             </button>
-                            <ul class="dropdown-menu pull-right" id="device_group" role="menu">
+                            <ul class="dropdown-menu pull-right" id="failed_pie_chart_dropdown" role="menu">
+                              <li><a>All</a></li>
                               <?php
                               if($result = $mysqli->query("SELECT dg_desc FROM device_group")) {
                                 while($row = $result->fetch_assoc()) {?>
@@ -138,25 +123,21 @@ if (!$staff || $staff->getRoleID() < 7){
                             </ul>
                         </div>
                     </div>
-                    <div class="pull-right">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                Date Range <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu pull-right" id="trans_date" role="menu">
-                                <li><a>Today</a></li>
-                                <li><a>This Week</a></li>
-                                <li><a>This Month</a></li>
-                                <li><a>This Quarter</a></li>
-                                <li><a>This Year</a></li>
-                                <li><a>All Time</a></li>
-                            </ul>
-                        </div>
-                    </div>
                 </div>
+
                 <!-- /.panel-heading -->
                 <div class="panel-body">
+                  <div class="pull-right">
+                    <p>End: <input type="text" id="failed_pie_chart_datepicker_end" size="10">&nbsp;&nbsp;</p>
+                  </div>
+                  <div class="pull-left">
+                    <p>&nbsp;&nbsp;Start: <input type="text" id="failed_pie_chart_datepicker_start" size="10"></p>
+                  </div>
+                  <div class="panel-body">
+                    <div class="panel-body">
                   <div id="failed_pie_chart_pie"></div>
+                </div>
+              </div>
                 </div>
                 <!-- /.panel-body -->
             </div>
@@ -180,8 +161,13 @@ if (!$staff || $staff->getRoleID() < 7){
     <!-- /.row -->
 </div>
 <!-- /#page-wrapper -->
-
 <?php
 //Standard call for dependencies
 include ($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');
 ?>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script type="text/javascript" src="/admin/reports/interactions.js"></script>
