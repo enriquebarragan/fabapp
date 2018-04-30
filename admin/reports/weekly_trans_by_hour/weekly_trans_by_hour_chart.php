@@ -1,6 +1,5 @@
 <?php
 include_once ($_SERVER['DOCUMENT_ROOT'].'/connections/db_connect8.php');
-//include_once ($_SERVER['DOCUMENT_ROOT'].'/admin/reports/weekly_trans_by_hour/weekly_trans_by_hour_sql.php');
 include_once ($_SERVER['DOCUMENT_ROOT'].'/admin/reports/functions.php');
 
 global $mysqli;

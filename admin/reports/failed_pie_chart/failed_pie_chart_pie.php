@@ -1,6 +1,5 @@
 <?php
 include_once ($_SERVER['DOCUMENT_ROOT'].'/connections/db_connect8.php');
-include_once ($_SERVER['DOCUMENT_ROOT'].'/admin/reports/failed_pie_chart/failed_pie_chart_sql.php');
 
 global $mysqli;
 $dg_desc = $_GET['q'];

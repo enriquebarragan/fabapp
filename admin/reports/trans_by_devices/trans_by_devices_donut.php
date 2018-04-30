@@ -1,6 +1,5 @@
 <?php
 include_once ($_SERVER['DOCUMENT_ROOT'].'/connections/db_connect8.php');
-//include_once ($_SERVER['DOCUMENT_ROOT'].'/admin/reports/trans_by_devices/trans_by_devices_sql.php');
 
 global $mysqli;
 
